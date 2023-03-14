@@ -25,15 +25,46 @@ $exampleURL = $http . $_SERVER['SERVER_NAME'] . $lilurl->getBaseUrl($exampleURLI
                     </div>
                     <span class="dcf-form-help">Lookup only searches against short <abbr title="Uniform Resource Locators">URLs</abbr> with exact match. To lookup <em><?php echo htmlspecialchars($exampleURL ?? ''); ?></em>, search for <em><?php echo htmlspecialchars($exampleURLID ?? ''); ?></em>.</span>
                 </form>
+                <?php if ($lilurl->adminCheck($auth->getUserId()) && !empty($link)): ?>
+                    <h3 class="dcf-txt-h5 dcf-mt-5"> Admin Controls </h3>
+                    <div class="dcf-pl-5">
+                        <form class="dcf-form dcf-mt-5" action="#" method="post">
+                            <label for="new-url-owner"> Update Owner/Creator </label>
+                            <div class="dcf-input-group">
+                                <input
+                                    id="new-url-owner"
+                                    name="new-url-owner"
+                                    type="text"
+                                    required=""
+                                    value="<?php echo $lilurl->escapeURL($link->createdBy); ?>"
+                                >
+                                <button class="dcf-btn dcf-btn-primary" type="submit"> Update </button>
+                            </div>
+                        </form>
+                        <form class="dcf-form dcf-mt-5" action="#" method="post">
+                            <label for="new-url-group"> Update Group </label>
+                            <div class="dcf-input-group">
+                                <input
+                                    id="new-url-group"
+                                    name="new-url-group"
+                                    type="text"
+                                    required=""
+                                    value="<?php echo htmlspecialchars($group->groupName ?? ''); ?>"
+                                >
+                                <button class="dcf-btn dcf-btn-primary" type="submit"> Update </button>
+                            </div>
+                        </form>
+                    </div>
+                <?php endif; ?>
             </div>
             <?php if (!empty($link)) :
-                $shorURL = $http . $_SERVER['SERVER_NAME'] . htmlspecialchars($lilurl->getBaseUrl($link->urlID));
+                $shortURL = $http . $_SERVER['SERVER_NAME'] . htmlspecialchars($lilurl->getBaseUrl($link->urlID));
             ?>
             <div>
                 <h2 class="dcf-txt-h4">Details for &apos;<?php echo htmlspecialchars($link->urlID ?? '') ?>&apos;</h2>
                 <dl class="dcf-txt-sm">
                     <dt><?php echo htmlspecialchars($appName ?? ''); ?></dt>
-                    <dd class="dcf-pl-6"><a href="<?php echo $shorURL; ?>" target="_blank" rel="noopener"><?php echo $shorURL; ?></a></dd>
+                    <dd class="dcf-pl-6"><a href="<?php echo $shortURL; ?>" target="_blank" rel="noopener"><?php echo $shortURL; ?></a></dd>
 
                     <dt>Long URL</dt>
                     <dd class="dcf-pl-6"><a href="<?php echo $lilurl->escapeURL($link->longURL) ?>" target="_blank" rel="noopener"><?php echo $lilurl->escapeURL($link->longURL) ?></a></dd>

@@ -112,10 +112,28 @@
     }
 ?>
 
+<?php if ($lilurl->adminCheck($auth->getUserId())): ?>
+    <h3 class="dcf-txt-h5 dcf-mt-5"> Admin Controls </h3>
+    <div class="dcf-pl-5">
+        <form class="dcf-form dcf-form-controls-inline" action="<?php echo $lilurl->getBaseUrl('a/links'); ?>" method="post">
+            <label for="uid-lookup">Lookup UID</label>
+            <div class="dcf-input-group">
+                <input id="uid-lookup" name="uid-lookup" type="text" required="">
+                <button class="dcf-btn dcf-btn-primary" type="submit">Submit</button>
+            </div>
+        </form>
+    </div>
+<?php endif; ?>
+
 <div class="dcf-bleed dcf-pt-8 dcf-pb-8">
     <div class="dcf-wrapper">
       <h2 class="dcf-txt-h4">Your URLs</h2>
-        <?php $urls = $lilurl->getUserURLs($auth->getUserId()); ?>
+        <?php if ($lilurl->adminCheck($auth->getUserId()) && isset($_POST['uid-lookup']) && !empty($_POST['uid-lookup']) ): ?>
+            <?php $urls = $lilurl->getUserURLs(htmlspecialchars($_POST['uid-lookup'])); ?>
+            <h3 class="dcf-txt-h5 dcf-mt-5"> UID: <?php echo htmlspecialchars($_POST['uid-lookup']); ?> </h3>
+        <?php else: ?>
+            <?php $urls = $lilurl->getUserURLs($auth->getUserId()); ?>
+        <?php endif; ?>
         <?php if (count($urls) > 0): ?>
             <table
                 id="go-urls"
@@ -162,7 +180,7 @@
                         </td>
                         <td data-header="Long URL">
                             <a
-                                href="<?php echo htmlspecialchars($lilurl->escapeURL($url->longURL)); ?>"
+                                href="<?php echo $lilurl->escapeURL($url->longURL); ?>"
                                 title="Full URL: <?php echo htmlspecialchars($url->longURL ?? ''); ?>"
                             >
                                 <?php echo $longURLDisplay; ?>

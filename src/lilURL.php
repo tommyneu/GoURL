@@ -46,6 +46,7 @@ class lilURL
 
     // do not increment redirect if $_SERVER['HTTP_USER_AGENT'] contains anything in this list
     protected $bot_user_agents = [];
+    protected $admin_uids = [];
 
     protected $db;
     protected static $random_id_length = 4;
@@ -96,6 +97,17 @@ class lilURL
             $this->bot_user_agents = (array) $userAgentsToBlock;
         }
         return $this;
+    }
+
+    public function setAdminUids($admin_uids)
+    {
+        $this->admin_uids = (array) $admin_uids;
+        return $this;
+    }
+
+    public function adminCheck($uid)
+    {
+        return in_array($uid, $this->admin_uids);
     }
 
     /**
@@ -172,8 +184,13 @@ class lilURL
         if (isset($urlParts['scheme']) && isset($urlParts['host'])) {
             $query = isset($urlParts['query']) ? '?' . $urlParts['query'] : '';
             $path = isset($urlParts['path']) ? $urlParts['path'] : '';
+            $port = isset($urlParts['port']) ? $urlParts['port'] : '';
             $hash = isset($urlParts['fragment']) ? '#' . $urlParts['fragment'] : '';
-            $longurl = $urlParts['scheme'] . '://' . $urlParts['host'] . $path . $query;
+            $longurl = $urlParts['scheme'] . '://' . $urlParts['host'];
+            if (!empty($port)) {
+                $longurl .= ":" . $port;
+            }
+            $longurl .= $path . $query;
         }
 
         //Start by gathering all the GA items

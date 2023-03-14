@@ -11,6 +11,7 @@ $lilurl->setBotUserAgents($bot_user_agents);
 if (defined('GA_ACCOUNT')) {
     $lilurl->setGaAccount(GA_ACCOUNT);
 }
+$lilurl->setAdminUids($admin_uids ?? []);
 
 // Use QR Code Icon PNG set, otherwise null it
 if (!isset($qrIconPng) || empty($qrIconPng)) {
@@ -90,6 +91,7 @@ $page->titlegraphic = '<a href="/" class="dcf-txt-h5">' . $appName . '</a>';
 
 $page->addStyleDeclaration(file_get_contents(__DIR__ . '/css/go.css'));
 $page->addHeadLink($lilurl->getBaseUrl(), 'home');
+$page->appendToHead('<meta name="sitemaster-verification-code" content="b22787e05c7ff3e5367e1f24ebb9a662">');
 
 $page->addScriptDeclaration("require(['jquery'], function(jq) {
     jq(function($){

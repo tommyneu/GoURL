@@ -79,6 +79,10 @@ $bot_user_agents = array(
     'Twitterbot'
 );
 
+$admin_uids = array(
+    'tneumann9',
+);
+
 // uncomment the line below to skip the protocol check
 // $allowed_procotols = array();
 
